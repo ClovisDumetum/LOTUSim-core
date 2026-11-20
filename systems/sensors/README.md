@@ -89,7 +89,7 @@ Every sensor type derives from `CustomSensor`, itself a `gz::sensors::Sensor`. I
 | `ShouldMeasure(now)` | Rate-limits updates to `update_rate` Hz, on average whatever the step, and respects the on/off state - call this as a guard at the top of `UpdateSensor()`, after any other check: a true result commits the sensor to measuring at that step |
 | `<vessel>/<sensor>/change_state` ROS 2 service | Lets external code turn the sensor on/off at runtime |
 | `m_rnd_gen` + `CreateNoiseModel()` (`noise_model.hpp`) | Gazebo's Gaussian noise, from an SDF `<noise>` element (see the IMU below) |
-| `Position()` / `LatLong()` / `Orientation()` | Called every tick by the plugin, so `m_position` / `m_lat_long` / `m_quad` are always current |
+| `Position()` / `GeoPosition()` / `Orientation()` | Called every tick by the plugin, so `m_position` (local ENU `gz::math::Vector3d`) / `m_geo_point` (`lotusim::common::GeoPoint`, NaN if the world has no spherical coordinates) / `m_quad` are always current |
 
 **What each subclass must implement:**
 
@@ -253,7 +253,7 @@ bool MySensor::CustomSensorLoad(const sdf::Sensor& _sdf)
 }
 ```
 
-**4. Implement `UpdateSensor()`** - guard with `ShouldMeasure()`, read whatever you need from the ECM (or the base class's `m_position` / `m_lat_long` / `m_quad`, already refreshed for you every tick), publish, and stamp `m_last_measurement_time`:
+**4. Implement `UpdateSensor()`** - guard with `ShouldMeasure()`, read whatever you need from the ECM (or the base class's `m_position` / `m_geo_point` / `m_quad`, already refreshed for you every tick), publish, and stamp `m_last_measurement_time`:
 
 ```cpp
 bool MySensor::UpdateSensor(
