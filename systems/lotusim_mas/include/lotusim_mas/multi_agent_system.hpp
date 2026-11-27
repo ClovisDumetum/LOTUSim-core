@@ -35,7 +35,6 @@
 #include "lotusim_msgs/action/mas_cmd.hpp"
 #include "lotusim_msgs/action/mas_cmd_array.hpp"
 #include "lotusim_msgs/msg/mas_cmd.hpp"
-#include "lotusim_msgs/msg/vessel_pose_array.hpp"
 #include "lotusim_msgs/msg/vessel_position_array.hpp"
 
 using GoalHandleMASCmdArray =
